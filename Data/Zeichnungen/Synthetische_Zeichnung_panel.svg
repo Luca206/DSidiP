@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="panel" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1190.38 841.89">
+  <defs>
+    <style>
+      .cls-1, .cls-2, .cls-3 {
+        fill: #1d1d1b;
+      }
+
+      .cls-2 {
+        stroke-width: .5px;
+      }
+
+      .cls-2, .cls-4, .cls-5 {
+        stroke: #1d1d1b;
+        stroke-miterlimit: 10;
+      }
+
+      .cls-6 {
+        letter-spacing: -.07em;
+      }
+
+      .cls-4 {
+        fill: #fff;
+      }
+
+      .cls-3 {
+        font-family: ArialMT, Arial;
+        font-size: 11px;
+      }
+
+      .cls-5 {
+        fill: none;
+      }
+    </style>
+  </defs>
+  <rect class="cls-5" x="204.4" y="248.46" width="141.73" height="141.73"/>
+  <polygon class="cls-5" points="487.86 459.06 346.13 459.06 346.13 351.06 346.13 317.33 487.86 317.33 487.86 459.06"/>
+  <polygon class="cls-5" points="204.4 137.14 234.8 106.73 315.72 106.73 346.13 137.14 346.13 248.46 204.4 248.46 204.4 137.14"/>
+  <path class="cls-5" d="M487.86,232.29v85.04l-141.73.54v-180.73c24.38,27.58,60.57,60.18,111.15,83.14,10.47,4.76,20.71,8.71,30.58,12.01Z"/>
+  <path class="cls-5" d="M487.86,232.46h142l.07,28.35c-28.98-.9-53.01,22.9-52.61,51.25.4,27.79,24.14,50.64,52.54,49.79v28.35h-142v-157.73Z"/>
+  <path class="cls-5" d="M735.43,232.46h-105.34l-.07,28.35c28.98-.9,53.01,22.9,52.61,51.25-.4,27.79-24.14,50.64-52.54,49.79v28.35h142v-121.4c-2.13.08-16.71.36-27.45-11.36-9.37-10.22-9.28-22.42-9.21-24.97Z"/>
+  <path class="cls-5" d="M772,317.33h141.73l.36-180.19-111.84,131.66h-30.15l-.1,48.53Z"/>
+  <polygon class="cls-5" points="913.73 345.67 914.08 248.46 1055.82 248.46 984.95 345.67 913.73 345.67"/>
+  <g>
+    <polygon class="cls-5" points="1056.05 643.42 1025.64 673.82 944.73 673.82 914.32 643.42 914.32 532.09 1056.05 532.09 1056.05 643.42"/>
+    <circle class="cls-5" cx="968.04" cy="623.44" r="28.35"/>
+  </g>
+  <polygon class="cls-5" points="629.84 531.93 488.03 531.93 488.03 423.93 488.03 390.19 629.84 390.19 629.84 531.93"/>
+  <polygon class="cls-5" points="772.09 531.93 630.08 531.93 630.08 423.93 630.08 390.19 772.09 390.19 772.09 531.93"/>
+  <line class="cls-4" x1="204.4" y1="390.19" x2="346.13" y2="390.19"/>
+  <polygon class="cls-5" points="204.4 390.06 346.13 390.06 346.13 524.69 204.4 418.41 204.4 390.06"/>
+  <polygon class="cls-5" points="346.13 459.06 487.86 459.06 488.03 631.09 346.13 524.69 346.13 459.06"/>
+  <polygon class="cls-5" points="629.84 673.66 629.84 531.93 488.03 531.93 488.03 631.09 544.8 673.66 629.84 673.66"/>
+  <rect class="cls-5" x="772.34" y="532.01" width="141.73" height="70.87"/>
+  <path class="cls-5" d="M772,317.33h141.73l.09,28.26h-14.17c-.87,0-6.58.03-10.7,4.7-3.42,3.87-3.48,8.37-3.47,9.47v101.3c-.04.81-.24,6.16,4,10.33,4.15,4.08,9.34,3.89,10.17,3.84h14.17l.26,56.69h-141.73l-.34-214.6Z"/>
+  <polygon class="cls-5" points="913.81 475.23 999.43 475.23 1056.13 531.92 914.07 532.01 913.81 475.23"/>
+  <g>
+    <polygon class="cls-5" points="914.08 137.14 944.49 106.73 1025.41 106.73 1055.82 137.14 1055.82 248.46 914.08 248.46 914.08 137.14"/>
+    <circle class="cls-5" cx="1002.65" cy="160.66" r="28.35"/>
+  </g>
+  <polygon class="cls-5" points="771.96 588.7 688.3 588.7 632.9 532.01 771.71 531.93 771.96 588.7"/>
+  <text class="cls-3" transform="translate(977.13 433.13)"><tspan x="0" y="0">01-</tspan><tspan class="cls-6" x="15.9" y="0">1</tspan><tspan x="21.2" y="0">1</tspan></text>
+  <circle class="cls-1" cx="965.4" cy="491.43" r="1.82"/>
+  <line class="cls-2" x1="965.4" y1="491.43" x2="990.6" y2="439.23"/>
+  <text class="cls-3" transform="translate(976.67 569.28)"><tspan x="0" y="0">01-01</tspan></text>
+  <text class="cls-3" transform="translate(950.33 220.06)"><tspan x="0" y="0">01-01</tspan></text>
+  <text class="cls-3" transform="translate(682.47 496.83)"><tspan x="0" y="0">01-09</tspan></text>
+  <text class="cls-3" transform="translate(548.38 598.98)"><tspan x="0" y="0">01-10</tspan></text>
+  <text class="cls-3" transform="translate(404.41 513.79)"><tspan x="0" y="0">01-08</tspan></text>
+  <text class="cls-3" transform="translate(268.82 433.13)"><tspan x="0" y="0">01-07</tspan></text>
+  <text class="cls-3" transform="translate(311.57 232.46)"><tspan x="0" y="0">01-02</tspan></text>
+  <circle class="cls-5" cx="275.26" cy="179.78" r="28.35"/>
+  <circle class="cls-1" cx="711.94" cy="555.79" r="1.82"/>
+  <line class="cls-2" x1="711.94" y1="555.79" x2="697.18" y2="501.04"/>
+  <text class="cls-3" transform="translate(353.85 280.17)"><tspan x="0" y="0">01-03</tspan></text>
+  <text class="cls-3" transform="translate(538.28 315.97)"><tspan x="0" y="0">01-05</tspan></text>
+  <text class="cls-3" transform="translate(695.6 343.58)"><tspan x="0" y="0">01-06</tspan></text>
+  <text class="cls-3" transform="translate(797.22 492.38)"><tspan x="0" y="0">01-12</tspan></text>
+  <text class="cls-3" transform="translate(813.11 301.68)"><tspan x="0" y="0">01-04</tspan></text>
+  <text class="cls-3" transform="translate(945.18 308.06)"><tspan x="0" y="0">01-13</tspan></text>
+</svg>
