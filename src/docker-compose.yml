@@ -1,0 +1,7 @@
+services:
+  dsidip:
+    image: dsidip:latest
+    volumes:
+      - ./code:/dsidip
+    ports:
+      - "8080:80"
