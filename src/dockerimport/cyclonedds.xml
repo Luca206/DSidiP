@@ -1,0 +1,22 @@
+<CycloneDDS>
+  <Domain id="any">
+    <General>
+      <AllowMulticast>false</AllowMulticast>
+    </General>
+    <Transport>
+      <UDP>
+        <Enabled>false</Enabled>
+      </UDP>
+      <TCP>
+        <Enabled>true</Enabled>
+        <NoDelay>true</NoDelay>
+      </TCP>
+    </Transport>
+    <Discovery>
+      <External>true</External>
+      <Peers>
+        <Peer address="192.168.0.20"/>
+      </Peers>
+    </Discovery>
+  </Domain>
+</CycloneDDS>

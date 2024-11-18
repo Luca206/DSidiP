@@ -1,7 +1,12 @@
 services:
   dsidip:
     image: dsidip:latest
+    network_mode: host
     volumes:
       - ./code:/dsidip
     ports:
-      - "8080:80"
+     - "8080:8080"
+     - "8009:8009"
+    environment:
+      - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+      - ROS_DOMAIN_ID=0

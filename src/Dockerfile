@@ -16,6 +16,8 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 RUN rosdep init && \
   rosdep update --rosdistro $ROS_DISTRO
 
+RUN apt-get update && apt-get install -y ros-$ROS_DISTRO-rmw-cyclonedds-cpp
+
 # setup colcon mixin and metadata
 RUN colcon mixin add default \
       https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml && \
@@ -29,4 +31,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-humble-ros-base=0.10.0-1* \
     && rm -rf /var/lib/apt/lists/*
 
-CMD ["python3", "dsidip/main.py"]
+# add needed directories and files
+# Config for TCP/IP communication
+RUN mkdir -p /root/.ros/config
+COPY dockerimport/cyclonedds.xml /root/.ros/config/cyclonedds.xml
+
+WORKDIR /dsidip
+
+# RUN apt-get update && apt-get install -y iputils-ping
+# RUN ping 192.168.0.20
+
+CMD ["python3", "main.py"]
