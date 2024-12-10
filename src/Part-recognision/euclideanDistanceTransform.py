@@ -7,8 +7,8 @@ def euclideanDistanceTransform(binImg: MatLike,
                                maskSize: int = DIST_MASK_5) -> tuple:
     """
     Calculates euclidean distance between each non-zero pixel and nearest
-    zero pixel in a binary image. Returns location of pixel with largest
-    distance to nearest zero pixel.
+    zero pixel in a binary image. Returns location of non-zero pixel with
+    largest distance to nearest zero pixel.
 
     Parameters
     ----------
@@ -24,7 +24,8 @@ def euclideanDistanceTransform(binImg: MatLike,
     Returns
     -------
     maxLoc: tuple
-        location of pixel with largest distance from nearest zero pixel
+        location of non-zero pixel with largest distance to nearest zero
+        pixel
     """
     dist = distanceTransform(src = binImg,
                              distanceType = distanceType,
@@ -40,8 +41,8 @@ def euclideanDistanceTransformNorm1(binImg: MatLike,
                                     maskSize: int = DIST_MASK_5) -> tuple:
     """
     Calculates euclidean distance between each non-zero pixel and nearest
-    zero pixel in a binary image. Returns location of pixel with largest
-    distance to nearest zero pixel.
+    zero pixel in a binary image. Returns location of non-zero pixel with
+    largest distance to nearest zero pixel.
     Pixel values normalized between [0, 1].
 
     Parameters
@@ -58,7 +59,8 @@ def euclideanDistanceTransformNorm1(binImg: MatLike,
     Returns
     -------
     maxLoc: tuple
-        location of pixel with largest distance from nearest zero pixel
+        location of non-zero pixel with largest distance to nearest zero
+        pixel
     """
     dist = distanceTransform(src = binImg,
                              distanceType = distanceType,
@@ -81,8 +83,8 @@ def euclideanDistanceTransformNorm255(binImg: MatLike,
                                       maskSize: int = DIST_MASK_5) -> tuple:
     """
     Calculates euclidean distance between each non-zero pixel and nearest
-    zero pixel in a binary image. Returns location of pixel with largest
-    distance to nearest zero pixel.
+    zero pixel in a binary image. Returns location of non-zero pixel with
+    largest distance to nearest zero pixel.
     Pixel values normalized between [0, 255].
 
     Parameters
@@ -99,7 +101,8 @@ def euclideanDistanceTransformNorm255(binImg: MatLike,
     Returns
     -------
     maxLoc: tuple
-        location of pixel with largest distance from nearest zero pixel
+        location of non-zero pixel with largest distance to nearest zero
+        pixel
     """
     dist = distanceTransform(src = binImg,
                              distanceType = distanceType,
