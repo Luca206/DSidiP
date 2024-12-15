@@ -16,7 +16,7 @@ inner_contours = []
 
 def getContours(img):
 
-    #mache ein weichzeichen um rauschen los zu werden
+    #mache ein weichzeichen um rauschen loszuwerden
     img = cv2.GaussianBlur(img, (5, 5), 0)
 
     #Rufe Contours auf:
