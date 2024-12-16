@@ -2,6 +2,7 @@
 from utils_camera import Camera
 import cv2
 import ContourMethoden as cm
+import ComponentComparer as cc
 
 # direct x oder direct show oder so zum streamen zum docker
 # weil die kamera nicht über usb erkannt wird
@@ -21,10 +22,13 @@ class Application:
                 # Hole das aktuelle Bild von der Kamera
                 img = self.camera.get_current_frame()
 
-                #TODO mit äußeren Kontouren berechnen huMoments
+                #TODO mit äußeren Kontouren berechnen huMoments -> als Input für ComponentComparer nehmen
                 outer_contours, inner_contours = cm.getContours(img)
 
                 #TODO Auslagerung der Vergleiche der Teile
+                best_tile_label = cc.find_most_similar_hu_moments(outer_contours)
+
+
                 # Calculate Moments
                 moments = cv2.moments(outer_contours[0])
                 # Calculate Hu Moments

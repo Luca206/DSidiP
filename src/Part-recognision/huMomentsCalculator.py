@@ -3,57 +3,54 @@ import cv2
 from matplotlib import pyplot as plt
 import ContourMethoden
 
-cap = cv2.VideoCapture('..\\..\\Data\\Dokumentation\\AW_Teile_mit_OpenCV_erkennen\\Eingabe_Bilder\\07.jpg')
+cap = cv2.VideoCapture('..\\..\\Data\\Dokumentation\\AW_Teile_mit_OpenCV_erkennen\\Eingabe_Bilder\\10.jpg')
 ret, image = cap.read()
 
-# print(ret)  #debug ob bild erfolgreich geladen wurde
+# print(ret)  # Debug if image was loaded correctly
 
-Kontur_aussen, Kontur_innen = ContourMethoden.getContours(image)
+outer_contour, inner_contour = ContourMethoden.getContours(image)
 
-Kontur_aussen = np.array(Kontur_aussen)
-Kontur_innen = np.array(Kontur_innen)
+outer_contour = np.array(outer_contour)
+inner_contour = np.array(inner_contour)
 
+#######################################################################################
 plt.figure(figsize=(15, 15))
-plt.imshow(image)  # Farbraum ist falsch weil matpltlib aber ist egal
+plt.imshow(image)  # Wrong color space
 
-# print(Kontur_aussen)
-# type(Kontur_aussen)
+# print(outer_contour)
+# type(outer_contour)
 
-# Methode zum erstellen und anzeigen der Maske, für debug-zwecke
+# Debug-method for creating and displaying the mask
 lower_red = np.array([0, 120, 70])
 upper_red = np.array([10, 255, 255])
 
 lower_red2 = np.array([170, 120, 70])
 upper_red2 = np.array([180, 255, 255])
 
-# mache ein weichzeichen um rauschen los zu werden
+# Soft focus to get rid of any noise
 img = cv2.GaussianBlur(image, (5, 5), 0)
 
-# Rufe Contours auf:
-# konvertiere von BGR zu HSV
+# Convert BGR to HSV
 hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
-# 2 Masken weil rot in HSV am anfang und ende liegt
+# 2 masks because red in HSV is at the beginning and end
 mask1 = cv2.inRange(hsv, lower_red, upper_red)
 mask2 = cv2.inRange(hsv, lower_red2, upper_red2)
 
-# Füge beide Masken zusammen
+# Merge masks
 mask = mask1 + mask2
 
 plt.figure(figsize=(15, 15))
-plt.imshow(mask)  # Farbraum falsch weil matpltlib
+plt.imshow(mask)  # Wrong color space (because of matplotlib)
 
-# Calculate Moments
-moments = cv2.moments(Kontur_aussen[0])
-# Calculate Hu Moments
-huMoments_aussen = cv2.HuMoments(moments)
+# Calculate outer HuMoments
+moments = cv2.moments(outer_contour[0])
+outer_huMoments = cv2.HuMoments(moments)
 
-# Die inneren Hu-Momente brauchen wir ja nicht eigentlich
+# Calculate inner HuMoments
+# moments = cv2.moments(inner_contour[0])
+# inner_huMoments = cv2.HuMoments(moments)
 
-# Calculate Moments
-# moments = cv2.moments(Kontur_innen[0])
-# Calculate Hu Moments
-# huMoments_innen = cv2.HuMoments(moments)
-
+# Debug
 # print("huMoments Außen:", huMoments_aussen)
 # print("huMoments Innen:", huMoments_innen)
