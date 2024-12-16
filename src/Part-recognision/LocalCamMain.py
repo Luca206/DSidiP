@@ -16,6 +16,7 @@ def list_available_cameras():
                     print("FEHLGESCHLAGEN!")
             return available_cameras
 
+#HI :)
 #Teste welche Kameras ich habe:
 available_cameras = list_available_cameras()
 print("-" * 40)
