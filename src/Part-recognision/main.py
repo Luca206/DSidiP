@@ -25,14 +25,13 @@ class Application:
                 #TODO mit äußeren Kontouren berechnen huMoments -> als Input für ComponentComparer nehmen
                 outer_contours, inner_contours = cm.getContours(img)
 
-                #TODO Auslagerung der Vergleiche der Teile
-                best_tile_label = cc.find_most_similar_hu_moments(outer_contours)
-
-
                 # Calculate Moments
                 moments = cv2.moments(outer_contours[0])
                 # Calculate Hu Moments
                 huMoments_aussen = cv2.HuMoments(moments)
+
+                #TODO Auslagerung der Vergleiche der Teile
+                best_tile_label = cc.find_most_similar_hu_moments(huMoments_aussen)
 
                 #versuch bild auf Bildschirmgröße anzupassen
                 #Nur zum anzeigen, sonst kann das raus
