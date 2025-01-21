@@ -1,136 +1,218 @@
-# <------------------------------------------------------------------------------------------------------>
-#
-# (Mit [TODO] ist unter anderem gemeint, dass sich der Arbeitsschritt noch nicht in der main.py befindet.)
-#
-# [DONE] 1. Bild einlesen
-# [DONE] 2. Maske berechnen
-# [DONE] 3. Äußere (und innere) Kontur(en) bestimmen
-#
-# [DONE] 4.1 Innere Kontur existiert nicht (-> Keine Bohrung)
-# [DONE]     4.1.1 Bild-Momente berechnen
-# [DONE]     4.1.2 Hu-Momente berechnen
-# [DONE]     4.1.3 Teil anhand der Hu-Momente eindeutig bestimmen
-#                  (mit Ausnahme von Teilen "01-09" und "01-11" aus offensichtlichen Gründen)
-# [DONE]     4.1.4 (Geometrischen) Schwerpunkt (mit Hilfe der Konturen) berechnen
-#                  -> Punkt zum Greifen durch Roboter
-#
-# [TODO] 4.2 Innere Kontur existiert (-> Bohrung)
-# [TODO]     4.2.1 Zwischen den Teilen "01-01" und "01-02" differenzieren
-#                  (In unserem Anwendungsfall die einzigen Teile mit Bohrung)
-# [DONE]     4.2.2 Bestimmen, welcher Punkt am weitesten vom Rand entfernt ist,
-#                  da (geometrischer) Schwerpunkt in Bohrung liegen kann
-#                  (Euklidische Distanztransformation)
-#                  -> Punkt zum Greifen durch Roboter
-#
-# [TODO] 5. Rotation des Teils berechnen (aktueller Ansatz: ArUco Marker)
-#           -> Gradmaß für Gegenrotation durch Roboter
-# [TODO] 6. Zielkoordinaten bzw. Punkt zum Loslassen der Teile bestimmen
-# [TODO] 7. Punkt zum Greifen, Punkt zum Loslassen und Gradmaß für Gegenrotation an Roboter senden
-#
-# <------------------------------------------------------------------------------------------------------>
-
 from utils_camera import Camera
-import centroid as c
-import ComponentComparer as cc
-import ContourMethoden as cm
-import createMask
-import cv2 as cv
-import euclideanDistanceTransform as edt
+import cv2
+import FarbScanMethoden as fsm
 import numpy as np
-#import time
+import ContourMethoden
+import centroid
+import ComponentComparer
+import euclideanDistanceTransform
+#from matplotlib import pyplot as plt
 
-# DirectX, DirectShow o.ä. zum Streamen zum Docker, weil die Kamera nicht über USB erkannt wird
+# DirectX oder DirectShow oder so zum Streamen zum Docker
+# weil die Kamera nicht über USB erkannt wird
+
+# Methode der Teile-erkennung:
+#  True für ArUcoMarker
+#  False für Maske (es werden trotzdem ArUco Marker für die relative Position verwendet)
+useAruco = True
+
+def send_to_robot(id, x_rel, y_rel, rotation):
+
+    # Hier kommt der Code zum senden der Daten zum Roboter rein :)
+
+    print("Folgende Daten wurden erfolgreich gesendet:")
+    print("ID:", id, "x_rel: ", x_rel, "y_rel: ", y_rel, "Rotation: ", rotation)
+
+    return 1
 
 # Client
 class Application:
+
     def __init__(self):
         self.camera = Camera()
 
     def run(self):
         # Initialisiere die Kamera
         self.camera.start_camera()
-        
+
         try:
             # Endlosschleife für den Live-Stream mit 10 fps
+            ankerA_x = None
+            ankerA_y = None
+            ankerB_x = None
+            ankerB_y = None
+            aktueller_marker = None
+            delay = 1
+
             while True:
-                # 1. Bild einlesen
-                img = self.camera.get_current_frame()
+                # Hole das aktuelle Bild von der Kamera
+                image = self.camera.get_current_frame()
+                #image = cv2.imread('hilfe2.jpg')
 
-                # 2. Maske berechnen
-                lower_red = np.array([0, 120, 70])
-                upper_red = np.array([10, 255, 255])
+                # Lade das ArUco-Dictionary
+                aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_6X6_250)
+                parameters = cv2.aruco.DetectorParameters()
 
-                lower_red2 = np.array([170, 120, 70])
-                upper_red2 = np.array([180, 255, 255])
+                gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-                mask = createMask.createMaskBGR2HSV(img = img,
-                                                    lower_b = lower_red,
-                                                    upper_b = upper_red,
-                                                    lower_b_2 = lower_red2,
-                                                    upper_b_2 = upper_red2)
+                # Erkenne die Marker
+                detector = cv2.aruco.ArucoDetector(aruco_dict, parameters)
+                corners, ids, rejectedImgPoints = detector.detectMarkers(gray)
 
-                # 3. Äußere (und innere) Kontur(en) bestimmen
-                outer_contours, inner_contours = cm.getContours(mask)
+                #ids = None
+                if ids is not None:
+                    #print("ids is  not None")
+                    for i in range(len(ids)):
+                        id = ids[i][0]
+                        #print("bin in legth ids")
+                        #print(id)
 
-                # 4.1 Innere Kontur existiert nicht (-> Keine Bohrung)
-                if len(inner_contours) == 0:
-                    # 4.1.1 Bild-Momente berechnen
-                    moments = cv.moments(outer_contours[0])
+                        #setze Koordinaten für Aankerpunkte, falls noch nicht gesetzt
+                        if id == 42:
+                            #print(corners[i][0][0])
+                            ankerA_x, ankerA_y = corners[i][0][0][0], corners[i][0][1][1]
+                            #print("anker A gesetzt")
+                        if id == 69:
+                            ankerB_x, ankerB_y = corners[i][0][0][0], corners[i][0][1][1]
+                            #print("anker B gesetzt")
 
-                    # 4.1.2 Hu-Momente berechnen
-                    huMoments_aussen = cv.HuMoments(moments)
+                        #gehe sicher das nicht daten für den selben punkt mehrmals gesendet werden
+                        #print(aktueller_marker)
+                        delay = delay + 1
+                        #print(delay)
 
-                    # 4.1.3 Teil anhand der Hu-Momente eindeutig bestimmen
-                    #       (mit Ausnahme der Teile "01-09" und "01-11" aus offensichtlichen Gründen)
-                    tile_label = cc.find_most_similar_hu_moments(huMoments_aussen)
+                    # Nutze Maske
+                    if not useAruco:
 
-                    # 4.1.4 (Geometrischen) Schwerpunkt (mit Hilfe der Konturen) berechnen
-                    #       -> Punkt zum Greifen durch Roboter
-                    grabbing_point = c.determine_centroid_from_contour(inner_contours)
-                    """ outer_centroid = c.determine_centroid_from_moments(moments) """ # NOTE: Schwerpunkt alternativ über Bild-Momente berechenbar
+                        if (delay > 30) \
+                            and (ankerA_x != None) \
+                            and (ankerB_x != None):
 
-                # [TODO] 4.2 Innere Kontur existiert (-> Bohrung)
-                else:
-                    # [TODO] 4.2.1 Zwischen den Teilen "01-01" und "01-02" differenzieren
-                    #              (In unserem Anwendungsfall die einzigen Teile mit Bohrung)
-                    threshold = ... # NOTE: Muss noch ermittelt werden, hängt (unter anderem) vom Kamerabild ab.
-                                    #       Voraussichtlich halbe euklidische Distanz vom äußeren zum inneren
-                                    #       Schwerpunkt des Teils "01-01" (außermittige Bohrung).
-                    outer_centroid = c.determine_centroid_from_contour(outer_contours)
-                    inner_centroid = c.determine_centroid_from_contour(inner_contours)
-                    distance = np.linalg.norm(np.array(outer_centroid) - np.array(inner_centroid))
-                    if distance >= threshold:
-                        tile_label = "01-01"
-                    else:
-                        tile_label = "01-02"
+                            #Methode zum erstellen der Red Maske:
+                            img, mask = fsm.createRedMask(img)
 
-                    # 4.2.2 Bestimmen, welcher Punkt am weitesten vom Rand entfernt ist,
-                    #       da (geometrischer) Schwerpunkt in Bohrung liegen kann
-                    #       (Euklidische Distanztransformation)
-                    #       -> Punkt zum Greifen durch Roboter
-                    grabbing_point = edt.euclideanDistanceTransform(mask)
+                            # Äußere (und innere) Kontur(en) bestimmen
+                            outer_contours, inner_contours = ContourMethoden.getContours(mask)
 
-                # [TODO] 5. Rotation des Teils berechnen (aktueller Ansatz: ArUco Marker)
-                #           -> Gradmaß für Gegenrotation durch Roboter
-                ...
+                            # Innere Kontur existiert nicht (= Keine Bohrung)
+                            if len(inner_contours) == 0:
+                                # Bild-Momente berechnen
+                                moments = cv2.moments(outer_contours[0])
 
-                # [TODO] 6. Zielkoordinaten bzw. Punkt zum Loslassen der Teile bestimmen
-                ...
+                                # Hu-Momente berechnen
+                                huMoments_aussen = cv2.HuMoments(moments)
 
-                # [TODO] 7. Punkt zum Greifen, Punkt zum Loslassen und Gradmaß für Gegenrotation an Roboter senden
-                ...
+                                # Teil anhand der Hu-Momente bestimmen
+                                tile_label = ComponentComparer.find_most_similar_hu_moments(huMoments_aussen)
 
-# <------------------------------------------------------------------------------------------------------------------------------------------------>
+                                # Schwerpunkt berechnen
+                                grabbing_point = centroid.determine_centroid_from_contour(inner_contours)
+                                """ outer_centroid = c.determine_centroid_from_moments(moments) """ # NOTE: Schwerpunkt alternativ über Bild-Momente berechenbar
 
-                # Versuch, das Bild auf die Bildschirmgröße anzupassen
-                # Nur zum Anzeigen, kann ansonsten entfernt werden
-                img = cv.resize(img, (1080, 1920))
+                            # Innere Kontur existiert (= Bohrung)
+                            else:
+                                # Zwischen den Teilen "01-01" und "01-02" differenzieren
+                                threshold = 22 # Halbe euklidische Distanz zwischen äußerem und innerem Schwerpunkt von Teil "01-01"
+                                outer_centroid = centroid.determine_centroid_from_contour(outer_contours)
+                                inner_centroid = centroid.determine_centroid_from_contour(inner_contours)
+                                distance = np.linalg.norm(np.array(outer_centroid) - np.array(inner_centroid))
+                                if distance >= threshold:
+                                    tile_label = "01-01"
+                                else:
+                                    tile_label = "01-02"
 
-                # Zeige das Bild in einem Fenster an
-                cv.imshow('Original Bild', img)
+                                # Bestimmen, welcher Punkt am weitesten vom Rand entfernt ist
+                                grabbing_point = euclideanDistanceTransform.euclideanDistanceTransform(mask)
+
+                            # Initialisiere eine Liste für die Eckpunkte
+                            corner_points = []
+
+                            # Iteriere durch die Konturen
+                            for contour in outer_contours:
+                                # Verwende die Approximation, um die Eckpunkte zu finden
+                                epsilon = 0.02 * cv2.arcLength(contour, True)
+                                approx = cv2.approxPolyDP(contour, epsilon, True)
+                                
+                                # Füge die Eckpunkte zur Liste hinzu
+                                for point in approx:
+                                    corner_points.append(point[0])
+                                    # Zeichne die Eckpunkte auf dem Bild
+                                    cv2.circle(image, tuple(point[0]), 5, (255, 0, 0), -1)
+
+                            # Berechne die Kantenlängen zwischen den Eckpunkten
+                            edges = []
+                            for i in range(len(corner_points)):
+                                pt1 = corner_points[i]
+                                pt2 = corner_points[(i + 1) % len(corner_points)]  # Verbinde den letzten Punkt mit dem ersten
+                                edge_length = np.linalg.norm(pt1 - pt2)
+                                edges.append((pt1, pt2, edge_length))
+
+                            # Bestimme die kürzeste Kante
+                            shortest_edge = min(edges, key=lambda x: x[2])
+
+                            # Berechnung des Anstiegs
+                            m = (shortest_edge[1][1] - shortest_edge[0][0]) / \
+                                (shortest_edge[1][1] - shortest_edge[0][0])
+
+                            #print("m=", m)
+                            # Berechnung des Winkels in Radiant
+                            theta = np.arctan(m)
+                            #print("theta=", theta)
+
+                            # Umwandlung des Winkels in Grad
+                            theta_degrees = np.degrees(theta)
+                            #print("grad= ", theta_degrees)
+
+                            # Berechnung der relativen Position in Prozent
+                            x_rel = (grabbing_point[0] - ankerA_x) / (ankerB_x - ankerA_x) * 100
+                            y_rel = (grabbing_point[1] - ankerA_y) / (ankerB_y - ankerA_y) * 100
+
+                            #Sende alle daten zum roboter
+                            id = tile_label
+                            send_to_robot(id, x_rel, y_rel, theta_degrees)
+                            delay = 1
+
+                    # Nutze ArucoMarker
+                    if useAruco:
+
+                        if (id != aktueller_marker) \
+                            and (delay > 30) \
+                            and (id != 42) \
+                            and (id != 69) \
+                            and (ankerA_x != None) \
+                            and (ankerB_x != None):
+                            aktueller_marker = ids[i][0]
+                            # Koordinaten der Punkte
+                            x1, y1 = corners[i][0][0][0], corners[i][0][0][1]
+                            x2, y2 = corners[i][0][1][0], corners[i][0][1][1]
+                            #print("bin in neue id gefunden")
+
+                            #print("x1:", x1, "y1:", y1)
+                            #print("x2:", x2, "y2:", y2)
+
+                            # Berechnung des Anstiegs
+                            m = (y2 - y1) / (x2 - x1)
+
+                            #print("m=", m)
+                            # Berechnung des Winkels in Radiant
+                            theta = np.arctan(m)
+                            #print("theta=", theta)
+
+                            # Umwandlung des Winkels in Grad
+                            theta_degrees = np.degrees(theta)
+                            #print("grad= ", theta_degrees)
+
+                            # Berechnung der relativen Position in Prozent
+                            x_rel = (x1 - ankerA_x) / (ankerB_x - ankerA_x) * 100
+                            y_rel = (y1 - ankerA_y) / (ankerB_y - ankerA_y) * 100
+
+                            #Sende alle daten zum roboter
+                            
+                            send_to_robot(id, x_rel, y_rel, theta_degrees)
+                            delay = 1
                 
                 # Warte 100 ms für ca. 10 fps und beende die Schleife bei Tastendruck 'q'
-                if cv.waitKey(100) & 0xFF == ord('q'):
+                if cv2.waitKey(100) & 0xFF == ord('q'):
                     break
 
         except KeyboardInterrupt:
@@ -139,7 +221,7 @@ class Application:
         finally:
             # Stoppen der Kamera und Schließen des Fensters
             self.camera.stop_camera()
-            cv.destroyAllWindows()
+            cv2.destroyAllWindows()
 
 # Start application
 if __name__ == "__main__":
