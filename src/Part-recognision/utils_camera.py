@@ -2,10 +2,7 @@ from ids_peak import ids_peak
 from ids_peak_ipl import ids_peak_ipl
 from ids_peak import ids_peak_ipl_extension
 import cv2
-import os
-import sys
 import threading
-from datetime import datetime
 import time
 from collections import deque
 

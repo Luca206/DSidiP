@@ -1,4 +1,3 @@
-import numpy as np
 import cv2
 
 # Mindestfläche der Contouren in Pixel:

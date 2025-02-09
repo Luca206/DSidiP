@@ -4,9 +4,8 @@ import createMask
 import numpy as np
 import ContourMethoden
 import centroid
-import ComponentComparer
+from src.Obsolete import ComponentComparer
 import euclideanDistanceTransform
-#from matplotlib import pyplot as plt
 
 # DirectX oder DirectShow oder so zum Streamen zum Docker
 # weil die Kamera nicht über USB erkannt wird

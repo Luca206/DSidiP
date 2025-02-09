@@ -1,5 +1,4 @@
 import jsonParser as jp
-import huMomentsCalculator as mc
 import cv2
 import numpy as np
 
