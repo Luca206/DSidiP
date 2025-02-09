@@ -1,6 +1,6 @@
 from utils_camera import Camera
 import cv2
-import FarbScanMethoden as fsm
+import createMask
 import numpy as np
 import ContourMethoden
 import centroid
@@ -89,7 +89,7 @@ class Application:
                             and (ankerB_x != None):
 
                             #Methode zum erstellen der Red Maske:
-                            img, mask = fsm.createRedMask(img)
+                            mask = createMask.createMaskBGR2HSV(image)
 
                             # Äußere (und innere) Kontur(en) bestimmen
                             outer_contours, inner_contours = ContourMethoden.getContours(mask)
