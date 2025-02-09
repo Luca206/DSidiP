@@ -16,6 +16,12 @@ import euclideanDistanceTransform
 #  False für Maske (es werden trotzdem ArUco Marker für die relative Position verwendet)
 useAruco = True
 
+lower_red = np.array([0, 120, 70])
+upper_red = np.array([10, 255, 255])
+
+lower_red2 = np.array([170, 120, 70])
+upper_red2= np.array([180, 255, 255])
+
 def send_to_robot(id, x_rel, y_rel, rotation):
 
     # Hier kommt der Code zum senden der Daten zum Roboter rein :)
@@ -89,7 +95,11 @@ class Application:
                             and (ankerB_x != None):
 
                             #Methode zum erstellen der Red Maske:
-                            mask = createMask.createMaskBGR2HSV(image)
+                            mask = createMask.createMaskBGR2HSV(img = image,
+                                                                lower_b = lower_red,
+                                                                upper_b = upper_red,
+                                                                lower_b_2 = lower_red2,
+                                                                upper_b_2 = upper_red2)
 
                             # Äußere (und innere) Kontur(en) bestimmen
                             outer_contours, inner_contours = ContourMethoden.getContours(mask)
