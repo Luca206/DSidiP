@@ -3,10 +3,10 @@ import cv2
 # Mindestfläche der Contouren in Pixel:
 min_area = 2000
 
-outer_contours = []
-inner_contours = []
-
 def getContours(mask):
+    outer_contours = []
+    inner_contours = []
+
     # Konturen finden
     Contours, hirarchie = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 

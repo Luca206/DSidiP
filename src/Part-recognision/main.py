@@ -4,7 +4,7 @@ import createMask
 import numpy as np
 import ContourMethoden
 import centroid
-from src.Obsolete import ComponentComparer
+import ComponentComparer
 import euclideanDistanceTransform
 
 # DirectX oder DirectShow oder so zum Streamen zum Docker

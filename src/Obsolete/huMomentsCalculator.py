@@ -3,7 +3,7 @@ import cv2
 from matplotlib import pyplot as plt
 import ContourMethoden
 
-cap = cv2.VideoCapture('..\\..\\Data\\Dokumentation\\AW_Teile_mit_OpenCV_erkennen\\Eingabe_Bilder\\10.jpg')
+cap = cv2.VideoCapture('../../Data/Dokumentation/AW_Teile_mit_OpenCV_erkennen/Eingabe_Bilder/10.jpg')
 ret, image = cap.read()
 
 # print(ret)  # Debug if image was loaded correctly
