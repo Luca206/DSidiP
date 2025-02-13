@@ -16,7 +16,6 @@ def list_available_cameras():
                     print("FEHLGESCHLAGEN!")
             return available_cameras
 
-#HI :)
 #Teste welche Kameras ich habe:
 available_cameras = list_available_cameras()
 print("-" * 40)
@@ -36,7 +35,7 @@ try:
 
         img, result = fsm.createRedMask(frame)
 
-        Contours, hirachrie, mask = fsm.createContours(frame)
+        contours, hierarchy, mask = fsm.createContours(frame)
 
         cv2.imshow('Original', img)   
         cv2.imshow('Maske', result) #ja, Result ist die Maske

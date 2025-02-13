@@ -1,13 +1,18 @@
+import json
 import jsonParser as jp
 import cv2
 import numpy as np
 
 
 def find_most_similar_hu_moments(reference_hu_moments):
-    # Results of jsonParser
-    tile_data = jp.get_tile_info(jp.data)
+    # Load json-data
+    with open('datasheet.json', 'r', encoding='utf-8') as db:
+        json_data = json.load(db)
 
-    # HuMoments of huMomentsCalculator - stays here to test
+    # Results of jsonParser
+    tile_data = jp.get_tile_info(json_data)
+
+    # HuMoments of huMomentsCalculator - Use it for test
     #reference_hu_moments = mc.huMoments_aussen
 
     # Check for reference HuMoments
@@ -38,7 +43,6 @@ def find_most_similar_hu_moments(reference_hu_moments):
             best_tile_label = tile_label
 
 
-
     # Best result
     if best_tile_label is not None:
         print("\n--- Best Match ---")
@@ -49,7 +53,3 @@ def find_most_similar_hu_moments(reference_hu_moments):
 
     return best_tile_label
 
-
-# Runs compare function
-if __name__ == "__main__":
-    find_most_similar_hu_moments()

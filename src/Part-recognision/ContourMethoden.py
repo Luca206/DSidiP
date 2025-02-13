@@ -1,22 +1,22 @@
 import cv2
 
-# Mindestfläche der Contouren in Pixel:
+# Minimum area of the contours in pixel:
 min_area = 2000
 
-def getContours(mask):
+def get_contours(mask):
     outer_contours = []
     inner_contours = []
 
-    # Konturen finden
-    Contours, hirarchie = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    # Find contours
+    contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-    # Bekomme hier die Koordinaten der Konturen und teile in innere und äußere Contouren
-    for i, contour in enumerate(Contours):
+    # Get the coordinates of the contours here and divide into inner and outer contours
+    for i, contour in enumerate(contours):
         area = cv2.contourArea(contour)
         if area > min_area:
-            if hirarchie[0][i][3] == -1: # -1 = äußere Kontur
+            if hierarchy[0][i][3] == -1: # -1 = outer contour
                 outer_contours.append(contour)
-            else: # innere Kontur
+            else: # inner contour
                 inner_contours.append(contour)
 
     return outer_contours, inner_contours

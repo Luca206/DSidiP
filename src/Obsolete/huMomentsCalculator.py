@@ -8,7 +8,7 @@ ret, image = cap.read()
 
 # print(ret)  # Debug if image was loaded correctly
 
-outer_contour, inner_contour = ContourMethoden.getContours(image)
+outer_contour, inner_contour = ContourMethoden.get_contours(image)
 
 outer_contour = np.array(outer_contour)
 inner_contour = np.array(inner_contour)

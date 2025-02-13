@@ -68,6 +68,6 @@ def determine_centroid_from_moments(m: Moments) -> tuple:
     tuple
         centroid
     """
-    cX = int(m["m10"] / m["m00"])
-    cY = int(m["m01"] / m["m00"])
-    return (cX, cY)
+    c_x = int(m["m10"] / m["m00"])
+    c_y = int(m["m01"] / m["m00"])
+    return c_x, c_y

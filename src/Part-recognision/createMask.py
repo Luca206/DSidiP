@@ -4,11 +4,11 @@ from cv2.typing import MatLike
 from numpy import asarray
 from numpy.typing import NDArray
 
-def createMaskBGR2HSV(img: MatLike,
-                      lower_b: NDArray,
-                      upper_b: NDArray,
-                      lower_b_2: NDArray = asarray(None),
-                      upper_b_2: NDArray = asarray(None)) -> MatLike:
+def create_mask_bgr2_hsv(img: MatLike,
+                         lower_b: NDArray,
+                         upper_b: NDArray,
+                         lower_b_2: NDArray = asarray(None),
+                         upper_b_2: NDArray = asarray(None)) -> MatLike:
     """
     Create mask (binary image) from BGR image within the specified HSV boundary.
 

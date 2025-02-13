@@ -1,3 +1,32 @@
+# <------------------------------------------------------------------------------------------------------>
+#
+#  1. Bild einlesen
+#  2. Maske berechnen
+#  3. Äußere (und innere) Kontur(en) bestimmen
+#
+#  4.1 Innere Kontur existiert nicht (-> Keine Bohrung)
+#      4.1.1 Bild-Momente berechnen
+#      4.1.2 Hu-Momente berechnen
+#      4.1.3 Teil anhand der Hu-Momente eindeutig bestimmen
+#                  (mit Ausnahme von Teilen "01-09" und "01-11")
+#      4.1.4 (Geometrischen) Schwerpunkt (mit Hilfe der Konturen) berechnen
+#                  -> Punkt zum Greifen durch Roboter
+#
+#  4.2 Innere Kontur existiert (-> Bohrung)
+#      4.2.1 Zwischen den Teilen "01-01" und "01-02" differenzieren
+#                  (In unserem Anwendungsfall die einzigen Teile mit Bohrung)
+#      4.2.2 Bestimmen, welcher Punkt am weitesten vom Rand entfernt ist,
+#                  da (geometrischer) Schwerpunkt in Bohrung liegen kann
+#                  (Euklidische Distanztransformation)
+#                  -> Punkt zum Greifen durch Roboter
+#
+#  5. Rotation des Teils berechnen (aktueller Ansatz: ArUco Marker)
+#           -> Gradmaß für Gegenrotation durch Roboter
+#  6. Zielkoordinaten bzw. Punkt zum Loslassen der Teile bestimmen
+#  7. Punkt zum Greifen, Punkt zum Loslassen und Gradmaß für Gegenrotation an Roboter senden
+#
+# <------------------------------------------------------------------------------------------------------>
+
 from utils_camera import Camera
 import cv2
 import createMask
@@ -10,16 +39,18 @@ import euclideanDistanceTransform
 # DirectX oder DirectShow oder so zum Streamen zum Docker
 # weil die Kamera nicht über USB erkannt wird
 
-# Methode der Teile-erkennung:
+# Methode der Teile-Erkennung:
 #  True für ArUcoMarker
 #  False für Maske (es werden trotzdem ArUco Marker für die relative Position verwendet)
+
 useAruco = True
 
 lower_red = np.array([0, 120, 70])
 upper_red = np.array([10, 255, 255])
 
 lower_red2 = np.array([170, 120, 70])
-upper_red2= np.array([180, 255, 255])
+upper_red2 = np.array([180, 255, 255])
+
 
 def send_to_robot(id, x_rel, y_rel, rotation):
 
@@ -29,6 +60,7 @@ def send_to_robot(id, x_rel, y_rel, rotation):
     print("ID:", id, "x_rel: ", x_rel, "y_rel: ", y_rel, "Rotation: ", rotation)
 
     return 1
+
 
 # Client
 class Application:
@@ -41,18 +73,18 @@ class Application:
         self.camera.start_camera()
 
         try:
-            # Endlosschleife für den Live-Stream mit 10 fps
-            ankerA_x = None
-            ankerA_y = None
-            ankerB_x = None
-            ankerB_y = None
-            aktueller_marker = None
+            # Endlosschleife für den Live-Stream mit 10 FPS
+            anchor_a_x = None
+            anchor_a_y = None
+            anchor_b_x = None
+            anchor_b_y = None
+            current_marker = None
             delay = 1
 
             while True:
                 # Hole das aktuelle Bild von der Kamera
                 image = self.camera.get_current_frame()
-                #image = cv2.imread('hilfe2.jpg')
+                # image = cv2.imread('hilfe2.jpg')
 
                 # Lade das ArUco-Dictionary
                 aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_6X6_250)
@@ -62,46 +94,38 @@ class Application:
 
                 # Erkenne die Marker
                 detector = cv2.aruco.ArucoDetector(aruco_dict, parameters)
-                corners, ids, rejectedImgPoints = detector.detectMarkers(gray)
+                corners, ids, rejected_img_points = detector.detectMarkers(gray)
 
-                #ids = None
+                # ids = None
                 if ids is not None:
-                    #print("ids is  not None")
                     for i in range(len(ids)):
                         id = ids[i][0]
-                        #print("bin in legth ids")
-                        #print(id)
 
-                        #setze Koordinaten für Aankerpunkte, falls noch nicht gesetzt
+                        # Setze Koordinaten für Ankerpunkte, falls noch nicht gesetzt
                         if id == 42:
-                            #print(corners[i][0][0])
-                            ankerA_x, ankerA_y = corners[i][0][0][0], corners[i][0][1][1]
-                            #print("anker A gesetzt")
+                            anchor_a_x, anchor_a_y = corners[i][0][0][0], corners[i][0][1][1]
                         if id == 69:
-                            ankerB_x, ankerB_y = corners[i][0][0][0], corners[i][0][1][1]
-                            #print("anker B gesetzt")
+                            anchor_b_x, anchor_b_y = corners[i][0][0][0], corners[i][0][1][1]
 
-                        #gehe sicher das nicht daten für den selben punkt mehrmals gesendet werden
-                        #print(aktueller_marker)
+                        # Gehe sicher, dass nicht Daten für den selben Punkt mehrmals gesendet werden
                         delay = delay + 1
-                        #print(delay)
 
                     # Nutze Maske
                     if not useAruco:
 
                         if (delay > 30) \
-                            and (ankerA_x != None) \
-                            and (ankerB_x != None):
+                                and (anchor_a_x is not None) \
+                                and (anchor_b_x is not None):
 
-                            #Methode zum erstellen der Red Maske:
-                            mask = createMask.createMaskBGR2HSV(img = image,
-                                                                lower_b = lower_red,
-                                                                upper_b = upper_red,
-                                                                lower_b_2 = lower_red2,
-                                                                upper_b_2 = upper_red2)
+                            # Methode zum Erstellen der Red Maske:
+                            mask = createMask.create_mask_bgr2_hsv(img=image,
+                                                                   lower_b=lower_red,
+                                                                   upper_b=upper_red,
+                                                                   lower_b_2=lower_red2,
+                                                                   upper_b_2=upper_red2)
 
                             # Äußere (und innere) Kontur(en) bestimmen
-                            outer_contours, inner_contours = ContourMethoden.getContours(mask)
+                            outer_contours, inner_contours = ContourMethoden.get_contours(mask)
 
                             # Innere Kontur existiert nicht (= Keine Bohrung)
                             if len(inner_contours) == 0:
@@ -109,19 +133,20 @@ class Application:
                                 moments = cv2.moments(outer_contours[0])
 
                                 # Hu-Momente berechnen
-                                huMoments_aussen = cv2.HuMoments(moments)
+                                hu_moments_outer = cv2.HuMoments(moments)
 
                                 # Teil anhand der Hu-Momente bestimmen
-                                tile_label = ComponentComparer.find_most_similar_hu_moments(huMoments_aussen)
+                                tile_label = ComponentComparer.find_most_similar_hu_moments(hu_moments_outer)
 
                                 # Schwerpunkt berechnen
                                 grabbing_point = centroid.determine_centroid_from_contour(inner_contours)
-                                """ outer_centroid = c.determine_centroid_from_moments(moments) """ # NOTE: Schwerpunkt alternativ über Bild-Momente berechenbar
+                                """ outer_centroid = c.determine_centroid_from_moments(moments) """  # NOTE: Schwerpunkt alternativ über Bild-Momente berechenbar
 
                             # Innere Kontur existiert (= Bohrung)
                             else:
+                                # Nicht mehr notwendig, da Teile bereits unterschieden werden
                                 # Zwischen den Teilen "01-01" und "01-02" differenzieren
-                                threshold = 22 # Halbe euklidische Distanz zwischen äußerem und innerem Schwerpunkt von Teil "01-01"
+                                threshold = 22  # Halbe euklidische Distanz zwischen äußerem und innerem Schwerpunkt von Teil "01-01"
                                 outer_centroid = centroid.determine_centroid_from_contour(outer_contours)
                                 inner_centroid = centroid.determine_centroid_from_contour(inner_contours)
                                 distance = np.linalg.norm(np.array(outer_centroid) - np.array(inner_centroid))
@@ -131,7 +156,7 @@ class Application:
                                     tile_label = "01-02"
 
                                 # Bestimmen, welcher Punkt am weitesten vom Rand entfernt ist
-                                grabbing_point = euclideanDistanceTransform.euclideanDistanceTransform(mask)
+                                grabbing_point = euclideanDistanceTransform.euclidean_distance_transform(mask)
 
                             # Initialisiere eine Liste für die Eckpunkte
                             corner_points = []
@@ -141,7 +166,7 @@ class Application:
                                 # Verwende die Approximation, um die Eckpunkte zu finden
                                 epsilon = 0.02 * cv2.arcLength(contour, True)
                                 approx = cv2.approxPolyDP(contour, epsilon, True)
-                                
+
                                 # Füge die Eckpunkte zur Liste hinzu
                                 for point in approx:
                                     corner_points.append(point[0])
@@ -152,7 +177,8 @@ class Application:
                             edges = []
                             for i in range(len(corner_points)):
                                 pt1 = corner_points[i]
-                                pt2 = corner_points[(i + 1) % len(corner_points)]  # Verbinde den letzten Punkt mit dem ersten
+                                pt2 = corner_points[
+                                    (i + 1) % len(corner_points)]  # Verbinde den letzten Punkt mit dem ersten
                                 edge_length = np.linalg.norm(pt1 - pt2)
                                 edges.append((pt1, pt2, edge_length))
 
@@ -163,20 +189,17 @@ class Application:
                             m = (shortest_edge[1][1] - shortest_edge[0][0]) / \
                                 (shortest_edge[1][1] - shortest_edge[0][0])
 
-                            #print("m=", m)
                             # Berechnung des Winkels in Radiant
                             theta = np.arctan(m)
-                            #print("theta=", theta)
 
                             # Umwandlung des Winkels in Grad
                             theta_degrees = np.degrees(theta)
-                            #print("grad= ", theta_degrees)
 
                             # Berechnung der relativen Position in Prozent
-                            x_rel = (grabbing_point[0] - ankerA_x) / (ankerB_x - ankerA_x) * 100
-                            y_rel = (grabbing_point[1] - ankerA_y) / (ankerB_y - ankerA_y) * 100
+                            x_rel = (grabbing_point[0] - anchor_a_x) / (anchor_b_x - anchor_a_x) * 100
+                            y_rel = (grabbing_point[1] - anchor_a_y) / (anchor_b_y - anchor_a_y) * 100
 
-                            #Sende alle daten zum roboter
+                            # Sende alle daten zum roboter
                             id = tile_label
                             send_to_robot(id, x_rel, y_rel, theta_degrees)
                             delay = 1
@@ -184,53 +207,46 @@ class Application:
                     # Nutze ArucoMarker
                     if useAruco:
 
-                        if (id != aktueller_marker) \
-                            and (delay > 30) \
-                            and (id != 42) \
-                            and (id != 69) \
-                            and (ankerA_x != None) \
-                            and (ankerB_x != None):
-                            aktueller_marker = ids[i][0]
+                        if (id != current_marker) \
+                                and (delay > 30) \
+                                and (id != 42) \
+                                and (id != 69) \
+                                and (anchor_a_x is not None) \
+                                and (anchor_b_x is not None):
+                            current_marker = ids[i][0]
                             # Koordinaten der Punkte
                             x1, y1 = corners[i][0][0][0], corners[i][0][0][1]
                             x2, y2 = corners[i][0][1][0], corners[i][0][1][1]
-                            #print("bin in neue id gefunden")
-
-                            #print("x1:", x1, "y1:", y1)
-                            #print("x2:", x2, "y2:", y2)
 
                             # Berechnung des Anstiegs
                             m = (y2 - y1) / (x2 - x1)
 
-                            #print("m=", m)
                             # Berechnung des Winkels in Radiant
                             theta = np.arctan(m)
-                            #print("theta=", theta)
 
                             # Umwandlung des Winkels in Grad
                             theta_degrees = np.degrees(theta)
-                            #print("grad= ", theta_degrees)
 
                             # Berechnung der relativen Position in Prozent
-                            x_rel = (x1 - ankerA_x) / (ankerB_x - ankerA_x) * 100
-                            y_rel = (y1 - ankerA_y) / (ankerB_y - ankerA_y) * 100
+                            x_rel = (x1 - anchor_a_x) / (anchor_b_x - anchor_a_x) * 100
+                            y_rel = (y1 - anchor_a_y) / (anchor_b_y - anchor_a_y) * 100
 
-                            #Sende alle daten zum roboter
-                            
+                            # Sende alle Daten zum Roboter
                             send_to_robot(id, x_rel, y_rel, theta_degrees)
                             delay = 1
-                
-                # Warte 100 ms für ca. 10 fps und beende die Schleife bei Tastendruck 'q'
+
+                # Warte 100 ms für ca. 10 FPS und beende die Schleife bei Tastendruck 'q'
                 if cv2.waitKey(100) & 0xFF == ord('q'):
                     break
 
         except KeyboardInterrupt:
             print("Programm wird beendet...")
-        
+
         finally:
             # Stoppen der Kamera und Schließen des Fensters
             self.camera.stop_camera()
             cv2.destroyAllWindows()
+
 
 # Start application
 if __name__ == "__main__":

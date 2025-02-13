@@ -1,0 +1,6 @@
+opencv-python~=4.11.0.86
+numpy~=1.21.6
+matplotlib~=3.4.2
+scipy~=1.6.3
+ids-peak~=1.10.0
+ids-peak-ipl~=1.14.0
