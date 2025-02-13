@@ -1,0 +1,55 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.0.9 Chrome/128.0.6613.186 Electron/32.2.5 Safari/537.36" version="26.0.9">
+  <diagram name="Seite-1" id="APP2bdeEmjiBmoop_Z_8">
+    <mxGraphModel dx="2245" dy="820" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="zPel8df-XTzm6RGU9e9D-1" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;sketch=1;curveFitting=1;jiggle=2;strokeWidth=10;strokeColor=light-dark(#6c8ebf, #5c79a3);aspect=fixed;container=0;" parent="1" vertex="1">
+          <mxGeometry x="-810" y="10" width="795.0617283950618" height="1150" as="geometry" />
+        </mxCell>
+        <mxCell id="zPel8df-XTzm6RGU9e9D-2" value="&lt;h1&gt;&lt;font style=&quot;font-size: 32px;&quot;&gt;Ablauf ohne ArUco Marker&lt;/font&gt;&lt;/h1&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Verdana;fontColor=#000033;aspect=fixed;container=0;" parent="1" vertex="1">
+          <mxGeometry x="-801.3678669193514" y="52.592592592592595" width="800.5703703703704" height="56.79012345679013" as="geometry" />
+        </mxCell>
+        <mxCell id="zPel8df-XTzm6RGU9e9D-3" value="&lt;span style=&quot;font-size: 16px;&quot;&gt;&amp;nbsp;Erstellung der Maske mit des HSV-Farbraum&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Verdana;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=light-dark(#418fb6, #ededed);fontStyle=1;align=left;fontColor=#FFFFFF;aspect=fixed;container=0;" parent="1" vertex="1">
+          <mxGeometry x="-675.2627542640555" y="166.17283950617286" width="629.4617283950618" height="56.79012345679013" as="geometry" />
+        </mxCell>
+        <mxCell id="zPel8df-XTzm6RGU9e9D-4" value="&lt;span style=&quot;font-size: 16px;&quot;&gt;&amp;nbsp;Bestimmung äußerer und innerer Kontouren&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Verdana;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=light-dark(#3d9dc5, #ededed);fontStyle=1;align=left;fontColor=#FFFFFF;aspect=fixed;container=0;" parent="1" vertex="1">
+          <mxGeometry x="-675.2627542640555" y="237.1604938271605" width="629.4617283950618" height="56.79012345679013" as="geometry" />
+        </mxCell>
+        <mxCell id="zPel8df-XTzm6RGU9e9D-5" value="&lt;span style=&quot;font-size: 16px;&quot;&gt;&amp;nbsp;Berechnung der Bild-Momente und Hu-Momente&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Verdana;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=light-dark(#3fadd2, #ededed);fontStyle=1;align=left;fontColor=#FFFFFF;aspect=fixed;container=0;" parent="1" vertex="1">
+          <mxGeometry x="-635.67" y="360" width="585.14" height="52.79" as="geometry" />
+        </mxCell>
+        <mxCell id="zPel8df-XTzm6RGU9e9D-6" value="&lt;span style=&quot;font-size: 16px;&quot;&gt;&amp;nbsp;Berechnung des Rotationswinkels&amp;nbsp;&lt;br&gt;&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Verdana;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=light-dark(#40bbdc, #ededed);fontStyle=1;align=left;fontColor=#FFFFFF;aspect=fixed;container=0;" parent="1" vertex="1">
+          <mxGeometry x="-679.9983673755878" y="769.9958024691358" width="629.4617283950618" height="56.79012345679013" as="geometry" />
+        </mxCell>
+        <mxCell id="zPel8df-XTzm6RGU9e9D-7" value="&lt;span style=&quot;font-size: 16px;&quot;&gt;&amp;nbsp;Senden der Daten:&lt;br&gt;&lt;br&gt;&amp;nbsp;X- u. Y-Relative,&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;font-size: 16px;&quot;&gt;Schwerpunkt&lt;/span&gt;&lt;span style=&quot;font-size: 16px;&quot;&gt;&amp;nbsp;und Rotationswinkel&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Verdana;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=light-dark(#6BCBE6,#EDEDED);fontStyle=1;align=left;fontColor=#FFFFFF;aspect=fixed;container=0;" parent="1" vertex="1">
+          <mxGeometry x="-680.0027542640555" y="900.0034567901234" width="629.4617283950618" height="113.58024691358025" as="geometry" />
+        </mxCell>
+        <mxCell id="zPel8df-XTzm6RGU9e9D-8" value="" style="html=1;shadow=0;dashed=0;align=center;verticalAlign=middle;shape=mxgraph.arrows2.arrow;dy=0.6;dx=40;direction=south;notch=0;strokeColor=light-dark(#717694, #EDEDED);sketch=1;curveFitting=1;jiggle=2;fillColor=light-dark(#a6dcf8, #ededed);opacity=80;container=0;" parent="1" vertex="1">
+          <mxGeometry x="-790" y="163.58" width="99.38" height="850" as="geometry" />
+        </mxCell>
+        <mxCell id="zPel8df-XTzm6RGU9e9D-11" value="&lt;span style=&quot;font-size: 16px;&quot;&gt;&amp;nbsp;Eindeutige Bestimmung der physischen Komponente über&amp;nbsp;&lt;br&gt;&amp;nbsp;Datenabgleich der Hu-Momente&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Verdana;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=light-dark(#3fadd2, #ededed);fontStyle=1;align=left;fontColor=#FFFFFF;aspect=fixed;container=0;" parent="1" vertex="1">
+          <mxGeometry x="-635.67" y="431.85" width="585.14" height="52.8" as="geometry" />
+        </mxCell>
+        <mxCell id="zPel8df-XTzm6RGU9e9D-12" value="&lt;span style=&quot;font-size: 16px;&quot;&gt;&amp;nbsp;Berechnung des geometrischen Schwerpunktes &lt;br&gt;&amp;nbsp;über Kontouren (Greifpunkt)&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Verdana;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=light-dark(#3fadd2, #ededed);fontStyle=1;align=left;fontColor=#FFFFFF;aspect=fixed;container=0;" parent="1" vertex="1">
+          <mxGeometry x="-635.67" y="501.85" width="585.14" height="52.8" as="geometry" />
+        </mxCell>
+        <mxCell id="zPel8df-XTzm6RGU9e9D-13" value="&lt;span style=&quot;font-size: 16px;&quot;&gt;&amp;nbsp;Differenzierung zwischen Komponenten mit Bohrungen&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Verdana;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=light-dark(#3fadd2, #ededed);fontStyle=1;align=left;fontColor=#FFFFFF;aspect=fixed;container=0;" parent="1" vertex="1">
+          <mxGeometry x="-635.67" y="630" width="585.14" height="52.8" as="geometry" />
+        </mxCell>
+        <mxCell id="zPel8df-XTzm6RGU9e9D-14" value="&lt;span style=&quot;font-size: 16px;&quot;&gt;&amp;nbsp;Berechnung des geometrischen Schwerpunktes&lt;br&gt;&amp;nbsp;über euklidische Distanztransformation (Greifpunkt)&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Verdana;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=light-dark(#3fadd2, #ededed);fontStyle=1;align=left;fontColor=#FFFFFF;aspect=fixed;container=0;" parent="1" vertex="1">
+          <mxGeometry x="-635.67" y="692.07" width="585.14" height="52.8" as="geometry" />
+        </mxCell>
+        <mxCell id="zPel8df-XTzm6RGU9e9D-15" value="&lt;span style=&quot;font-size: 16px;&quot;&gt;&amp;nbsp;Bestimmung der Zielkoordinaten zur Positionierung&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Verdana;sketch=1;curveFitting=1;jiggle=2;strokeColor=none;fillColor=light-dark(#4ec1e0, #ededed);fontStyle=1;align=left;fontColor=#FFFFFF;aspect=fixed;container=0;" parent="1" vertex="1">
+          <mxGeometry x="-679.9983673755878" y="837.2158024691358" width="629.4617283950618" height="56.79012345679013" as="geometry" />
+        </mxCell>
+        <mxCell id="zPel8df-XTzm6RGU9e9D-17" value="&lt;h1&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;&amp;nbsp;Innere Kontur existiert nicht (keine Bohrung)&lt;/font&gt;&lt;/h1&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Verdana;fontColor=#000033;aspect=fixed;container=0;" parent="1" vertex="1">
+          <mxGeometry x="-670" y="300" width="630" height="44.69" as="geometry" />
+        </mxCell>
+        <mxCell id="zPel8df-XTzm6RGU9e9D-18" value="&lt;h1&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;&amp;nbsp;Innere Kontur existiert nicht (keine Bohrung)&lt;/font&gt;&lt;/h1&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Verdana;fontColor=#000033;aspect=fixed;container=0;" parent="1" vertex="1">
+          <mxGeometry x="-670" y="570" width="630" height="44.69" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
